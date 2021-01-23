@@ -1,5 +1,6 @@
 import requests
 import time
+import sys
 from pyquery import PyQuery
 from main_config import ya_login, ya_password
 
@@ -43,9 +44,14 @@ r_password = session.post('https://passport.yandex.ru/registration-validations/a
                           headers={'User-Agent': my_user_agent, 'Referer': 'https://passport.yandex.ru/auth/welcome',
                                    'X-Requested-With': 'XMLHttpRequest'})
 
-# проверим что все хорошо - обычным образом запросим страницу профиля. должны увидеть свое Имя и Фамилию
-r_profile = session.get('https://passport.yandex.ru/profile', headers={'User-Agent': my_user_agent})
-pyquery_object = PyQuery(r_profile.text)
-first_name = pyquery_object('div.personal-info__first:first').text()
-last_name = pyquery_object('div.personal-info__last:first').text()
-print(f'Profile name: {first_name} {last_name}')
+if (r_password.json()['status'] == 'ok'):
+    time.sleep(1)
+    # проверим что все хорошо - обычным образом запросим страницу профиля. должны увидеть свое Имя и Фамилию
+    r_profile = session.get('https://passport.yandex.ru/profile', headers={'User-Agent': my_user_agent})
+    pyquery_object = PyQuery(r_profile.text)
+    first_name = pyquery_object('div.personal-info__first:first').text()
+    last_name = pyquery_object('div.personal-info__last:first').text()
+    print(f'Profile name: {first_name} {last_name}')
+else:
+    print(f'Exit script. Error at multi_step/commit_password: {r_password.json()["status"]} {r_password.json()["errors"]}')
+    sys.exit(1)
