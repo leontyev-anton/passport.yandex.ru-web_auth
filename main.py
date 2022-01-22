@@ -1,8 +1,9 @@
-import requests
-import time
 import sys
-from pyquery import PyQuery
+import time
+
+import requests
 from main_config import ya_login, ya_password
+from pyquery import PyQuery
 
 # будем отправлять такой User Agent, чтобы Яндекс не посчитал нас ботом
 my_user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36'
